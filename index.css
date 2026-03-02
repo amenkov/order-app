@@ -1,3 +1,42 @@
 body {
     margin: 0;
-} 
+    background-color: whitesmoke;
+    font-family: 'Smythe', sans-serif;
+}
+
+h1 {
+    font-size: 90px;
+}
+
+.main {
+    width: 600px;
+    margin: 0 auto;
+
+}
+
+.orderItem {
+    display: flex;
+    border-bottom: 1px solid #D2D2D2;
+    margin-bottom: 45px;
+    line-height: 5px;
+    align-items: center;
+    font-size: 28px;
+}
+.orderDetails {
+    padding-left: 25px;
+}
+
+.order-btn {
+    margin-left: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 28px;
+    border: 1px solid #D2D2D2;
+}
+
+#logo {
+    height: 170px;
+    margin-bottom: 65px;
+
+}
