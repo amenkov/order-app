@@ -2,10 +2,16 @@ body {
     margin: 0;
     background-color: whitesmoke;
     font-family: 'Smythe', sans-serif;
+    color: black;
 }
 
 h1 {
     font-size: 90px;
+}
+
+p {
+    font-size: 16px;
+    color: #8B8B8B;
 }
 
 .main {
@@ -17,17 +23,17 @@ h1 {
 .orderItem {
     display: flex;
     border-bottom: 1px solid #D2D2D2;
-    margin-bottom: 45px;
+    padding: 10px 0;
     line-height: 5px;
     align-items: center;
     font-size: 28px;
 }
+
 .orderDetails {
     padding-left: 25px;
 }
 
 .order-btn {
-    margin-left: auto;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -35,8 +41,37 @@ h1 {
     border: 1px solid #D2D2D2;
 }
 
+.right {
+    margin-left: auto;
+}
+
+.receipt {
+    font-size: 28px;
+    text-align: center;
+    line-height: 5px;
+}
+
+.newOrder {
+    display: flex;
+    align-items: center;
+
+}
+
+.hidden {
+    display: none;
+}
+
+.remove {
+    color: #8B8B8B;
+    font-size: 16px;
+    border: 0px;
+    background: none;
+    font-family: 'Smythe';
+    padding-left: 25px;
+}
+
 #logo {
     height: 170px;
-    margin-bottom: 65px;
+    margin-bottom: 20px;
 
 }
