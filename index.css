@@ -9,6 +9,11 @@ h1 {
     font-size: 90px;
 }
 
+h1, h2, h3 {
+    margin: 5px;
+    line-height: 1;
+}
+
 p {
     font-size: 16px;
     color: #8B8B8B;
@@ -24,7 +29,7 @@ p {
     display: flex;
     border-bottom: 1px solid #D2D2D2;
     padding: 10px 0;
-    line-height: 5px;
+    line-height: 1px;
     align-items: center;
     font-size: 28px;
 }
@@ -46,14 +51,19 @@ p {
 }
 
 .receipt {
+    margin-top: 20px;
     font-size: 28px;
     text-align: center;
-    line-height: 5px;
+
 }
+
+
 
 .newOrder {
     display: flex;
     align-items: center;
+    margin: 0;  
+    line-height: 1;
 
 }
 
@@ -68,11 +78,21 @@ p {
 
 .remove-btn {
     color: #8B8B8B;
-    font-size: 16px;
+    font-size: 25px;
     border: 0px;
     background: none;
     font-family: 'Smythe';
+    padding-top: 5px;
     padding-left: 25px;
+}
+
+.total {
+    font-size: 28px;
+    text-align: end;
+    border-top: 1px solid black;
+    margin-top: 10px;
+    padding: 10px 0;
+
 }
 
 #logo {

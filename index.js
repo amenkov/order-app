@@ -49,11 +49,10 @@ function handleOrderBtn(dataset) {
 
     const receiptEl = document.getElementById('receipt')
 
-    let isProductAlredyOrdered = document.querySelectorAll(`[data-product=${name}]`).length
+    const isProductAlredyOrdered = document.querySelectorAll(`[data-product=${name}]`).length
     let productQuantity = 0
 
     if (!isProductAlredyOrdered) {
-        console.log(isProductAlredyOrdered)
         productQuantity++
 
         const mealNameEl = document.createElement('h2')
@@ -70,6 +69,7 @@ function handleOrderBtn(dataset) {
 
         const newOrder = document.createElement('div')
         newOrder.className = 'newOrder'
+        newOrder.id = 'newOrder'
         newOrder.dataset.product = name
 
         newOrder.append(mealNameEl)
@@ -80,6 +80,9 @@ function handleOrderBtn(dataset) {
         receiptEl.appendChild(newOrder)
 
         receiptEl.classList.remove('hidden')
+
+        renderTotalSection()
+
     } else {
         const quantitySpanEl = document.getElementById(`${name}`)
         productQuantity = Number(quantitySpanEl.textContent)
@@ -96,27 +99,38 @@ function handleRemoveBtn(dataset) {
 
     console.log("Quantity: ", quantity)
 
-    if (quantity >= 1) {
+    if (quantity > 1) {
         quantity--
         quantityEl.textContent = quantity
-    } else if (quantity === 0) {
+    } else if (quantity == 1) {
         const productEl = document.querySelectorAll(`[data-product=${mealToRemove}]`)[0]
         productEl.remove()
-        // clearProductListIfEmpty()
+        clearProductListIfEmpty()
     }
 
     function clearProductListIfEmpty() {
         const newOrderElSize = document.getElementsByClassName('newOrder').length
-        console.log(newOrderElSize)
+        const totalEl = document.getElementById('total')
+
+        if (newOrderElSize === 0) {
+            totalEl.remove()
+            document.getElementById('receipt').classList.add('hidden')
+        }
     }
 
-    
+}
 
+function renderTotalSection() {
+    const totalEl = document.getElementById('total')
+    const main = document.getElementById('main')
 
-        // const quantitySpanEl = document.getElementById(`${name}`)
-        // productQuantity = Number(quantitySpanEl.textContent)
-        // productQuantity++
+    if (!totalEl) {
+        const totalHtml = `
+        <div class="total" id="total">
+            <h2>Total: <span class="right">$12</span></h2>
+        </div>
+        `
 
-        // quantitySpanEl.textContent = productQuantity
-
+        main.innerHTML += totalHtml
+    }
 }
