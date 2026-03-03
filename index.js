@@ -2,10 +2,17 @@ import menuArray from "./data.js"
 
 const orders = document.getElementById('orders')
 
-document.addEventListener('click', function(e){
-    
-    if(e.target.classList.contains('order-btn')) {
+const productList = menuArray.map(item => item.name)
+
+document.addEventListener('click', function (e) {
+
+    if (e.target.classList.contains('order-btn')) {
         handleOrderBtn(e.target.dataset)
+        return
+    } 
+
+    if(e.target.classList.contains('remove-btn')) {
+        handleRemoveBtn(e.target.dataset)
     }
 
 })
@@ -29,7 +36,7 @@ function render() {
                 </div>
         `
     }).join("")
-    
+
     orders.innerHTML = ordersHTml
 
 }
@@ -38,28 +45,78 @@ function handleOrderBtn(dataset) {
 
     const selectedMeal = menuArray.find(item => item.id === Number(dataset.id))
 
-    const {name, price} = selectedMeal
-
-    const mealNameEl = document.createElement('h2')
-    mealNameEl.textContent = name
-
-    const removeBtn = document.createElement('button')
-    removeBtn.textContent = 'remove'
-    removeBtn.classList.add('remove')
-
-    const priceEl = document.createElement('h2')
-    priceEl.textContent = `$${price}`
-    priceEl.classList.add('right')
+    const { id, name, price } = selectedMeal
 
     const receiptEl = document.getElementById('receipt')
-    const newOrder = document.createElement('div')
-    newOrder.className = 'newOrder'
 
-    newOrder.append(mealNameEl)
-    newOrder.append(removeBtn)
-    newOrder.append(priceEl)
+    let isProductAlredyOrdered = document.querySelectorAll(`[data-product=${name}]`).length
+    let productQuantity = 0
 
-    receiptEl.appendChild(newOrder)
+    if (!isProductAlredyOrdered) {
+        console.log(isProductAlredyOrdered)
+        productQuantity++
 
-    receiptEl.classList.remove('hidden')
+        const mealNameEl = document.createElement('h2')
+        mealNameEl.textContent = name
+
+        const removeBtn = document.createElement('button')
+        removeBtn.textContent = 'remove'
+        removeBtn.classList.add('remove-btn')
+        removeBtn.dataset.remove = name
+
+        const priceEl = document.createElement('h2')
+        priceEl.classList.add('right')
+        priceEl.innerHTML = `<span class="quantity" id=${name}>${productQuantity}</span> $${price}`
+
+        const newOrder = document.createElement('div')
+        newOrder.className = 'newOrder'
+        newOrder.dataset.product = name
+
+        newOrder.append(mealNameEl)
+        newOrder.append(removeBtn)
+
+        newOrder.append(priceEl)
+
+        receiptEl.appendChild(newOrder)
+
+        receiptEl.classList.remove('hidden')
+    } else {
+        const quantitySpanEl = document.getElementById(`${name}`)
+        productQuantity = Number(quantitySpanEl.textContent)
+        productQuantity++
+
+        quantitySpanEl.textContent = productQuantity
+    }
+}
+
+function handleRemoveBtn(dataset) {
+    const mealToRemove = dataset.remove
+    const quantityEl = document.getElementById(mealToRemove)
+    let quantity = Number(quantityEl.textContent)
+
+    console.log("Quantity: ", quantity)
+
+    if (quantity >= 1) {
+        quantity--
+        quantityEl.textContent = quantity
+    } else if (quantity === 0) {
+        const productEl = document.querySelectorAll(`[data-product=${mealToRemove}]`)[0]
+        productEl.remove()
+        // clearProductListIfEmpty()
+    }
+
+    function clearProductListIfEmpty() {
+        const newOrderElSize = document.getElementsByClassName('newOrder').length
+        console.log(newOrderElSize)
+    }
+
+    
+
+
+        // const quantitySpanEl = document.getElementById(`${name}`)
+        // productQuantity = Number(quantitySpanEl.textContent)
+        // productQuantity++
+
+        // quantitySpanEl.textContent = productQuantity
+
 }

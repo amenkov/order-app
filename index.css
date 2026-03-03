@@ -61,7 +61,12 @@ p {
     display: none;
 }
 
-.remove {
+.quantity {
+    color: #8B8B8B;
+    font-size: 25px;
+}
+
+.remove-btn {
     color: #8B8B8B;
     font-size: 16px;
     border: 0px;
