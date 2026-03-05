@@ -16,13 +16,17 @@
         <div class="receipt hidden" id="receipt">
             <h2>Your order</h2>
         </div>
-        <form class="form-checkout hidden" id="form-checkout">
+        <dialog class="form-checkout" id="form-checkout">
+        <form  method="dialog">
             <p2 class="form-summary">Enter card details</p2>
             <input class="form-input" type="text" required="true" id="name"  placeholder="Enter your name">
             <input class="form-input" type="text" required="true" id="cardNumber" placeholder="Enter card number">
             <input class="form-input" type="text" required="true" id="cvv" placeholder="Enter CVV">
-            <button class="btn pay-btn">Pay</button>
+            <button class="btn pay-btn" id="pay-btn">Pay</button>
         </form>
+        </dialog>
+        <div class="thanks" id="thanks">
+        </div>
     <script src="index.js" type="module"></script>
 </body>
 

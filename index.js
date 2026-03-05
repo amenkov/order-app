@@ -5,6 +5,7 @@ const orders = document.getElementById('orders')
 const productList = menuArray.map(item => item.name)
 
 document.addEventListener('click', function (e) {
+    console.log(e.target.id)
 
     if (e.target.classList.contains('order-btn')) {
         handleOrderBtn(e.target.dataset)
@@ -18,14 +19,20 @@ document.addEventListener('click', function (e) {
 
     if (e.target.id === 'checkout-btn') {
         handleCheckoutBtn()
+        return
     }
+
+    if (e.target.id === 'pay-btn') {
+        handlePayment()
+        return
+    }
+
 
 })
 
 render()
 
 function render() {
-
     const ordersHTml = menuArray.map((item) => {
         return `
                 <div class="orderItem" id=${item.id}>
@@ -43,18 +50,14 @@ function render() {
     }).join("")
 
     orders.innerHTML = ordersHTml
-
 }
 
 function handleOrderBtn(dataset) {
-
     const selectedMeal = menuArray.find(item => item.id === Number(dataset.id))
-
     const { id, name, price } = selectedMeal
-
     const receiptEl = document.getElementById('receipt')
 
-    const isProductAlredyOrdered = document.querySelectorAll(`[data-product=${name}]`).length
+    const isProductAlredyOrdered = document.querySelectorAll(`[data-product="${name}"]`).length
     let productQuantity = 0
 
     if (!isProductAlredyOrdered) {
@@ -65,34 +68,29 @@ function handleOrderBtn(dataset) {
 
         const removeBtn = document.createElement('button')
         removeBtn.textContent = 'remove'
-        removeBtn.classList.add('btn','remove-btn')
+        removeBtn.classList.add('btn', 'remove-btn')
         removeBtn.dataset.remove = name
 
         const priceEl = document.createElement('h2')
         priceEl.classList.add('right')
-        priceEl.innerHTML = `<span class="quantity" id=${name} data-product-id=${id}>${productQuantity}</span> $${price}`
+        priceEl.innerHTML = `<span class="quantity" id="${name}" data-product-id="${id}">${productQuantity}</span> $${price}`
 
         const newOrder = document.createElement('div')
         newOrder.className = 'newOrder'
-        newOrder.id = 'newOrder'
         newOrder.dataset.product = name
 
         newOrder.append(mealNameEl)
         newOrder.append(removeBtn)
-
         newOrder.append(priceEl)
 
         receiptEl.appendChild(newOrder)
-
         receiptEl.classList.remove('hidden')
 
         renderTotalSection()
-
     } else {
-        const quantitySpanEl = document.getElementById(`${name}`)
+        const quantitySpanEl = document.getElementById(name)
         productQuantity = Number(quantitySpanEl.textContent)
         productQuantity++
-
         quantitySpanEl.textContent = productQuantity
         renderTotalSection()
     }
@@ -102,45 +100,51 @@ function handleRemoveBtn(dataset) {
     const mealToRemove = dataset.remove
     const quantityEl = document.getElementById(mealToRemove)
 
+    if (!quantityEl) return
+
     let quantity = Number(quantityEl.textContent)
 
     if (quantity > 1) {
         quantity--
         quantityEl.textContent = quantity
         renderTotalSection()
-    } else if (quantity == 1) {
-        const productEl = document.querySelectorAll(`[data-product=${mealToRemove}]`)[0]
-        productEl.remove()
-        clearProductListIfEmpty()
+    } else if (quantity === 1) {
+        const productEl = document.querySelector(`[data-product="${mealToRemove}"]`)
+        if (productEl) {
+            productEl.remove()
+            clearProductListIfEmpty()
+        }
     }
-
 }
 
 function clearProductListIfEmpty() {
     const newOrderElSize = document.getElementsByClassName('newOrder').length
     const totalEl = document.getElementById('total')
     const checkoutEl = document.getElementById('checkout')
+    const receiptEl = document.getElementById('receipt')
 
     if (newOrderElSize === 0) {
-        totalEl.remove()
-        checkoutEl.remove()
-        document.getElementById('receipt').classList.add('hidden')
+        if (totalEl) totalEl.remove()
+        if (checkoutEl) checkoutEl.remove()
+        if (receiptEl) receiptEl.classList.add('hidden')
     }
 }
 
 function renderTotalSection() {
-    const totalEl = document.getElementById('total')
+    let totalEl = document.getElementById('total')
     const main = document.getElementById('main')
     const quantityEl = document.getElementsByClassName('quantity')
-    const sumEl = document.getElementById("sum")
+    let sumEl = document.getElementById("sum")
 
     let totalSum = 0
 
     Array.from(quantityEl).forEach(element => {
-        const productPrice = menuArray.find(item => item.id === Number(element.dataset.productId)).price
-        const productQuantity = Number(element.textContent)
-
-        totalSum += productPrice * productQuantity
+        const product = menuArray.find(item => item.id === Number(element.dataset.productId))
+        if (product) {
+            const productPrice = product.price
+            const productQuantity = Number(element.textContent)
+            totalSum += productPrice * productQuantity
+        }
     });
 
     if (!totalEl) {
@@ -149,17 +153,57 @@ function renderTotalSection() {
             <h2>Total: <span class="right" id="sum">$${totalSum}</span></h2>    
         </div>
         <div class="checkout" id="checkout">
-        <button class="btn checkout-btn" id="checkout-btn">Complete order</btn>
+            <button class="btn checkout-btn" id="checkout-btn">Complete order</button>
         </div>
         `
-
         main.innerHTML += totalHtml
-    } else {
+    } else if (sumEl) {
         sumEl.textContent = `$${totalSum}`
     }
 }
 
 function handleCheckoutBtn() {
-    const formEl = document.getElementById('form-checkout')
-    formEl.classList.remove('hidden')
+    const dialog = document.getElementById('form-checkout');
+    if (dialog) {
+        dialog.showModal();
+    }
+}
+
+function handlePayment() {
+    const dialog = document.getElementById('form-checkout');
+    const receipt = document.getElementById('receipt');
+    const total = document.getElementById('total');
+    const checkout = document.getElementById('checkout');
+    const thanks = document.getElementById('thanks')
+    const name = document.getElementById('name').value
+    console.log(name)
+
+    if (receipt) {
+        const orderItems = receipt.querySelectorAll('.newOrder');
+        orderItems.forEach(item => {
+            item.remove();
+        });
+        receipt.classList.add('hidden');
+    }
+
+    if (total) {
+        total.remove();
+    }
+
+    if (checkout) {
+
+        checkout.remove();
+    }
+
+    if (dialog) {
+        dialog.close();
+    }
+
+    thanks.textContent = `Thanks, ${name}! Your order is on it's way!`
+
+    thanks.classList.add('show')
+
+    setTimeout(function(){
+        thanks.classList.remove('show')
+    }, 3000)
 }
