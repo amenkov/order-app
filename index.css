@@ -129,7 +129,7 @@ p {
     font-size: 18px;
 }
 
-.checkout-btn:hover {
+.checkout-btn:hover, .pay-btn:hover {
     background: #34D399;
 }
 
