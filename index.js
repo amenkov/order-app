@@ -138,7 +138,10 @@ function renderTotalSection() {
     if (!totalEl) {
         const totalHtml = `
         <div class="total" id="total">
-            <h2>Total: <span class="right" id="sum">$${totalSum}</span></h2>
+            <h2>Total: <span class="right" id="sum">$${totalSum}</span></h2>    
+        </div>
+        <div class="checkout" id="checkout">
+        <button class="btn checkout-btn" id="checkout-btn">Complete order</btn>
         </div>
         `
 
