@@ -3,8 +3,8 @@
 <head>
     <link rel="stylesheet" href="index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Smythe&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Smythe&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,7 +16,13 @@
         <div class="receipt hidden" id="receipt">
             <h2>Your order</h2>
         </div>
-    </div>
+        <form class="form-checkout hidden" id="form-checkout">
+            <p2 class="form-summary">Enter card details</p2>
+            <input class="form-input" type="text" required="true" id="name"  placeholder="Enter your name">
+            <input class="form-input" type="text" required="true" id="cardNumber" placeholder="Enter card number">
+            <input class="form-input" type="text" required="true" id="cvv" placeholder="Enter CVV">
+            <button class="btn pay-btn">Pay</button>
+        </form>
     <script src="index.js" type="module"></script>
 </body>
 

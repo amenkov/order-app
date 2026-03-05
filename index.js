@@ -13,6 +13,11 @@ document.addEventListener('click', function (e) {
 
     if (e.target.classList.contains('remove-btn')) {
         handleRemoveBtn(e.target.dataset)
+        return
+    }
+
+    if (e.target.id === 'checkout-btn') {
+        handleCheckoutBtn()
     }
 
 })
@@ -32,7 +37,7 @@ function render() {
                         <p>${item.ingredients.join(", ")}</p>
                         <h3>$${item.price}</h3>
                 </div>
-                    <button class="order-btn right" data-id=${item.id}>+</button>
+                    <button class="btn order-btn right" data-id=${item.id}>+</button>
                 </div>
         `
     }).join("")
@@ -60,7 +65,7 @@ function handleOrderBtn(dataset) {
 
         const removeBtn = document.createElement('button')
         removeBtn.textContent = 'remove'
-        removeBtn.classList.add('remove-btn')
+        removeBtn.classList.add('btn','remove-btn')
         removeBtn.dataset.remove = name
 
         const priceEl = document.createElement('h2')
@@ -96,6 +101,7 @@ function handleOrderBtn(dataset) {
 function handleRemoveBtn(dataset) {
     const mealToRemove = dataset.remove
     const quantityEl = document.getElementById(mealToRemove)
+
     let quantity = Number(quantityEl.textContent)
 
     if (quantity > 1) {
@@ -113,9 +119,11 @@ function handleRemoveBtn(dataset) {
 function clearProductListIfEmpty() {
     const newOrderElSize = document.getElementsByClassName('newOrder').length
     const totalEl = document.getElementById('total')
+    const checkoutEl = document.getElementById('checkout')
 
     if (newOrderElSize === 0) {
         totalEl.remove()
+        checkoutEl.remove()
         document.getElementById('receipt').classList.add('hidden')
     }
 }
@@ -149,4 +157,9 @@ function renderTotalSection() {
     } else {
         sumEl.textContent = `$${totalSum}`
     }
+}
+
+function handleCheckoutBtn() {
+    const formEl = document.getElementById('form-checkout')
+    formEl.classList.remove('hidden')
 }
