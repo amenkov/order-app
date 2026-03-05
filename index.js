@@ -9,9 +9,9 @@ document.addEventListener('click', function (e) {
     if (e.target.classList.contains('order-btn')) {
         handleOrderBtn(e.target.dataset)
         return
-    } 
+    }
 
-    if(e.target.classList.contains('remove-btn')) {
+    if (e.target.classList.contains('remove-btn')) {
         handleRemoveBtn(e.target.dataset)
     }
 
@@ -65,7 +65,7 @@ function handleOrderBtn(dataset) {
 
         const priceEl = document.createElement('h2')
         priceEl.classList.add('right')
-        priceEl.innerHTML = `<span class="quantity" id=${name}>${productQuantity}</span> $${price}`
+        priceEl.innerHTML = `<span class="quantity" id=${name} data-product-id=${id}>${productQuantity}</span> $${price}`
 
         const newOrder = document.createElement('div')
         newOrder.className = 'newOrder'
@@ -89,6 +89,7 @@ function handleOrderBtn(dataset) {
         productQuantity++
 
         quantitySpanEl.textContent = productQuantity
+        renderTotalSection()
     }
 }
 
@@ -97,40 +98,52 @@ function handleRemoveBtn(dataset) {
     const quantityEl = document.getElementById(mealToRemove)
     let quantity = Number(quantityEl.textContent)
 
-    console.log("Quantity: ", quantity)
-
     if (quantity > 1) {
         quantity--
         quantityEl.textContent = quantity
+        renderTotalSection()
     } else if (quantity == 1) {
         const productEl = document.querySelectorAll(`[data-product=${mealToRemove}]`)[0]
         productEl.remove()
         clearProductListIfEmpty()
     }
 
-    function clearProductListIfEmpty() {
-        const newOrderElSize = document.getElementsByClassName('newOrder').length
-        const totalEl = document.getElementById('total')
+}
 
-        if (newOrderElSize === 0) {
-            totalEl.remove()
-            document.getElementById('receipt').classList.add('hidden')
-        }
+function clearProductListIfEmpty() {
+    const newOrderElSize = document.getElementsByClassName('newOrder').length
+    const totalEl = document.getElementById('total')
+
+    if (newOrderElSize === 0) {
+        totalEl.remove()
+        document.getElementById('receipt').classList.add('hidden')
     }
-
 }
 
 function renderTotalSection() {
     const totalEl = document.getElementById('total')
     const main = document.getElementById('main')
+    const quantityEl = document.getElementsByClassName('quantity')
+    const sumEl = document.getElementById("sum")
+
+    let totalSum = 0
+
+    Array.from(quantityEl).forEach(element => {
+        const productPrice = menuArray.find(item => item.id === Number(element.dataset.productId)).price
+        const productQuantity = Number(element.textContent)
+
+        totalSum += productPrice * productQuantity
+    });
 
     if (!totalEl) {
         const totalHtml = `
         <div class="total" id="total">
-            <h2>Total: <span class="right">$12</span></h2>
+            <h2>Total: <span class="right" id="sum">$${totalSum}</span></h2>
         </div>
         `
 
         main.innerHTML += totalHtml
+    } else {
+        sumEl.textContent = `$${totalSum}`
     }
 }
